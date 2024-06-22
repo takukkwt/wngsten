@@ -4,13 +4,6 @@ html {
   font-size: 100%;
 }
 
-/* スタイルのリセット */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* ボディのスタイル */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
