@@ -10,7 +10,7 @@
 /* ボディ全体のスタイル */
 body {
     font-family: 'Roboto', Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #ffffff; /* 白色の背景 */
     color: #333;
     line-height: 1.6;
     display: flex;
@@ -20,8 +20,8 @@ body {
 
 /* ヘッダー */
 header {
-    background-color: #343a40;
-    color: #ffffff;
+    background-color: #f8f9fa; /* グレーの背景 */
+    color: #333;
     padding: 20px 0;
     text-align: center;
 }
@@ -50,7 +50,7 @@ main {
 }
 
 .recipe-list {
-    background-color: #ffffff;
+    background-color: #ffffff; /* 白色の背景 */
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -73,27 +73,33 @@ main {
     margin: 10px 0;
     padding: 15px 0;
     border-bottom: 1px solid #eee;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .recipe-list li:last-child {
     border-bottom: none;
 }
 
+.recipe-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* グレーの影 */
+}
+
 .recipe-list a {
-    color: #007bff;
+    color: #007bff; /* 青色のリンク */
     font-size: 1.2em;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .recipe-list a:hover {
-    color: #0056b3;
+    color: #0056b3; /* ホバー時の色 */
 }
 
 /* フッター */
 footer {
-    background-color: #343a40;
-    color: #ffffff;
+    background-color: #f8f9fa; /* グレーの背景 */
+    color: #333;
     text-align: center;
     padding: 10px 0;
     margin-top: 20px;
