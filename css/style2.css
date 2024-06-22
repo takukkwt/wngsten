@@ -7,4 +7,6 @@ html {
 h1{
   color: #2b2a27;
   font-family: "Helvetica Neue", "Arial", "Hiragino Sans", "Meiryo", sans-serif;
+  text-align: center;
+  padding-top: 20px;
 }
