@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+html {
+  font-size: 100%;
+}
+
+h1{
+  color: #2b2a27;
+  font-family: "Helvetica Neue", "Arial", "Hiragino Sans", "Meiryo", sans-serif;
+}
