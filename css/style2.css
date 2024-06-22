@@ -11,17 +11,11 @@
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: #f0f0f0;
+    padding: 20px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
-}
-
-/* コンテナのスタイル */
-.container {
-    width: 100%;
-    max-width: 800px;
 }
 
 /* タイトルのスタイル */
@@ -36,6 +30,8 @@ h1 {
 ul {
     list-style-type: none;
     padding: 0;
+    width: 100%;
+    max-width: 600px;
 }
 
 /* リストアイテムのスタイル */
@@ -51,10 +47,7 @@ li {
 /* リストアイテムのホバー効果 */
 li:hover {
     transform: translateY(-5px);
-    box-shadow: 
-        0 10px 20px rgba(255, 0, 0, 0.6),
-        0 0 10px rgba(0, 255, 0, 0.6) inset,
-        0 0 20px rgba(0, 0, 255, 0.6) inset;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* リンクのスタイル */
@@ -71,4 +64,15 @@ a {
 a:hover {
     color: #2980b9;
     text-decoration: underline;
+}
+
+/* フッターのスタイル */
+footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+footer p {
+    font-size: 0.8em;
+    color: #666;
 }
