@@ -11,12 +11,11 @@
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: #f0f0f0;
-    margin: 0;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px;
 }
 
 /* タイトルのスタイル */
@@ -69,18 +68,9 @@ a:hover {
 
 /* メディアクエリ */
 @media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
     h1 {
         font-size: 2em;
         margin-bottom: 15px;
-    }
-
-    ul {
-        width: 100%;
-        max-width: 100%;
     }
 
     li {
