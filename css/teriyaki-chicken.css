@@ -1,0 +1,97 @@
+@charset "UTF-8";
+
+/* スタイルのリセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ボディのスタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0 10px;
+}
+
+/* ヘッダーのスタイル */
+header {
+    background-color: #4caf50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* メインコンテンツのスタイル */
+main {
+    flex: 1;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* セクションのスタイル */
+section {
+    margin-bottom: 20px;
+}
+
+.intro, .ingredients, .steps {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* リストのスタイル */
+ul, ol {
+    margin-left: 20px;
+}
+
+/* フッターのスタイル */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+/* メディアクエリ */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    .intro, .ingredients, .steps {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    ul, ol {
+        margin-left: 15px;
+        font-size: 0.9em;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+}
