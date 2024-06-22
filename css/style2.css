@@ -18,6 +18,12 @@ body {
     padding: 20px;
 }
 
+/* コンテナのスタイル */
+.container {
+    width: 100%;
+    max-width: 800px;
+}
+
 /* タイトルのスタイル */
 h1 {
     color: #333;
@@ -30,8 +36,6 @@ h1 {
 ul {
     list-style-type: none;
     padding: 0;
-    width: 100%;
-    max-width: 600px;
 }
 
 /* リストアイテムのスタイル */
@@ -47,7 +51,10 @@ li {
 /* リストアイテムのホバー効果 */
 li:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+        0 10px 20px rgba(255, 0, 0, 0.6),
+        0 0 10px rgba(0, 255, 0, 0.6) inset,
+        0 0 20px rgba(0, 0, 255, 0.6) inset;
 }
 
 /* リンクのスタイル */
@@ -64,20 +71,4 @@ a {
 a:hover {
     color: #2980b9;
     text-decoration: underline;
-}
-
-/* メディアクエリ */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2em;
-        margin-bottom: 15px;
-    }
-
-    li {
-        padding: 15px;
-    }
-
-    a {
-        font-size: 1em;
-    }
 }
