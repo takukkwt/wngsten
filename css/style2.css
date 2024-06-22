@@ -7,72 +7,98 @@
     box-sizing: border-box;
 }
 
-/* ボディのスタイル */
+/* ボディ全体のスタイル */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f0f0f0;
-    padding: 20px;
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
     display: flex;
     flex-direction: column;
-    align-items: center;
     min-height: 100vh;
 }
 
-/* タイトルのスタイル */
+/* ヘッダー */
+header {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 h1 {
-    color: #333;
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+}
+
+/* メインコンテンツ */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.recipe-list {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.recipe-list h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    text-align: center;
 }
 
-/* リストのスタイル */
-ul {
+.recipe-list ul {
     list-style-type: none;
     padding: 0;
-    width: 100%;
-    max-width: 600px;
 }
 
-/* リストアイテムのスタイル */
-li {
-    background-color: #fff;
+.recipe-list li {
     margin: 10px 0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
 }
 
-/* リストアイテムのホバー効果 */
-li:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+.recipe-list li:last-child {
+    border-bottom: none;
 }
 
-/* リンクのスタイル */
-a {
-    text-decoration: none;
-    color: #3498db;
+.recipe-list a {
+    color: #007bff;
     font-size: 1.2em;
-    display: block;
+    text-decoration: none;
     transition: color 0.3s;
-    word-wrap: break-word; /* 長い単語を折り返す */
 }
 
-/* リンクのホバー効果 */
-a:hover {
-    color: #2980b9;
-    text-decoration: underline;
+.recipe-list a:hover {
+    color: #0056b3;
 }
 
-/* フッターのスタイル */
+/* フッター */
 footer {
-    margin-top: 20px;
+    background-color: #343a40;
+    color: #ffffff;
     text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
 }
 
 footer p {
     font-size: 0.8em;
-    color: #666;
 }
