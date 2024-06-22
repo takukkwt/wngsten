@@ -4,36 +4,68 @@ html {
   font-size: 100%;
 }
 
+/* スタイルのリセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ボディのスタイル */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f0f0;
     margin: 0;
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
+/* タイトルのスタイル */
 h1 {
     color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
+/* リストのスタイル */
 ul {
     list-style-type: none;
     padding: 0;
+    width: 100%;
+    max-width: 600px;
 }
 
+/* リストアイテムのスタイル */
 li {
     background-color: #fff;
     margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
+/* リストアイテムのホバー効果 */
+li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* リンクのスタイル */
 a {
     text-decoration: none;
     color: #3498db;
-    font-size: 18px;
+    font-size: 1.2em;
+    display: block;
+    transition: color 0.3s;
 }
 
+/* リンクのホバー効果 */
 a:hover {
+    color: #2980b9;
     text-decoration: underline;
 }
