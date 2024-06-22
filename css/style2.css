@@ -16,7 +16,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* タイトルのスタイル */
@@ -58,10 +58,36 @@ a {
     font-size: 1.2em;
     display: block;
     transition: color 0.3s;
+    word-wrap: break-word; /* 長い単語を折り返す */
 }
 
 /* リンクのホバー効果 */
 a:hover {
     color: #2980b9;
     text-decoration: underline;
+}
+
+/* メディアクエリ */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+
+    ul {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    li {
+        padding: 15px;
+    }
+
+    a {
+        font-size: 1em;
+    }
 }
