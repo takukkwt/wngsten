@@ -68,7 +68,7 @@
 function checkPassword() {
     var password = document.getElementById("password").value;
     // 正しいパスワードを設定します（例として "password123" を使用）
-    var correctPassword = "password123";
+    var correctPassword = "tarako0821";
 
     if (password === correctPassword) {
         window.location.href = "slide.html"; // パスワードが正しい場合、リダイレクトするページを指定
@@ -80,11 +80,11 @@ function checkPassword() {
 </head>
 <body>
     <div class="container">
-        <h2>このコンテンツの閲覧にはパスワードが必要です。</h2>
-        <label for="password">パスワード：</label>
+        <h2>Password Check</h2>
+        <label for="password">パスワードを入力：</label>
         <input type="password" id="password" name="password">
         <br><br>
-        <button onclick="checkPassword()">Submit</button>
+        <button onclick="checkPassword()">確定</button>
     </div>
 </body>
 </html>
