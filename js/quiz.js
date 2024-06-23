@@ -1,7 +1,7 @@
 const questions = [
-    { text: "地球は何番目の惑星ですか？", answer: "3" },
+    { text: "地球は太陽から数えて何番目の惑星ですか？", answer: "3" },
     { text: "太陽系の中で最も大きい惑星は何ですか？", answer: "木星" },
-    { text: "月は地球の周りを何日で一周しますか？", answer: "約27日" }
+    { text: "月は地球の周りを何日で一周しますか？", answer: "27日" }
 ];
 
 let currentQuestionIndex = 0;
