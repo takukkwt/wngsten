@@ -29,10 +29,65 @@
                 <li><a href="misoshiru.html" target="_blank">味噌汁</a></li>
             </ul>
         </section>
+
+        <!-- コメントフォームを追加 -->
+        <section class="comments">
+            <h2>コメントを残す</h2>
+            <form id="comment-form">
+                <textarea id="comment" name="comment" rows="4" placeholder="コメントを入力してください..."></textarea>
+                <button type="button" onclick="addComment()">コメントを追加</button>
+            </form>
+            <div id="comment-list">
+                <h3>コメント一覧</h3>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Takukk Recipie</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            loadComments();
+        });
+
+        function addComment() {
+            const commentText = document.getElementById('comment').value;
+            if (commentText.trim() !== '') {
+                const commentList = document.getElementById('comment-list');
+                const comment = document.createElement('p');
+                comment.textContent = commentText;
+                commentList.appendChild(comment);
+
+                saveComment(commentText);
+                document.getElementById('comment').value = '';
+            }
+        }
+
+        function saveComment(commentText) {
+            let comments = localStorage.getItem('comments');
+            if (!comments) {
+                comments = [];
+            } else {
+                comments = JSON.parse(comments);
+            }
+            comments.push(commentText);
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
+
+        function loadComments() {
+            let comments = localStorage.getItem('comments');
+            if (comments) {
+                comments = JSON.parse(comments);
+                const commentList = document.getElementById('comment-list');
+                comments.forEach(commentText => {
+                    const comment = document.createElement('p');
+                    comment.textContent = commentText;
+                    commentList.appendChild(comment);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
