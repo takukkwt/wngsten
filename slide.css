@@ -1,0 +1,18 @@
+/* スライドショー全体のスタイル */
+.slideshow-container {
+    max-width: 600px; /* スライドショーの最大幅 */
+    position: relative;
+    margin: auto;
+}
+
+/* スライド（画像）のスタイル */
+.slides img {
+    width: 100%; /* 画像を幅いっぱいに表示 */
+    display: none; /* 最初はすべての画像を非表示 */
+}
+
+/* 最初のスライドの表示 */
+.slides img:first-child {
+    display: block; /* 最初の画像を表示 */
+}
+
