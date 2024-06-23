@@ -54,6 +54,7 @@ header {
     background-color: #007bff; /* ボタンの背景色を設定 */
     color: white; /* ボタンのテキスト色を設定 */
     border-radius: 4px; /* ボタンに角丸を適用 */
+    margin-left: auto; /* 右側に余白を自動的に設定 */
 }
 
 h1 {
