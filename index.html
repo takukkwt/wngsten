@@ -3,21 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン画面</title>
-    <link rel="stylesheet" href="css/login.css">
+    <title>同意ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666666;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>ログイン</h2>
-        <form id="loginForm">
-            <label for="username">ユーザー名:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">パスワード:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">ログイン</button>
+    <div class="container">
+        <h1>利用規約に同意</h1>
+        <p>以下のボタンを押して、利用規約に同意してください。</p>
+        <form action="home.html">
+            <button type="submit">同意する</button>
         </form>
-        <p id="error-message" class="error-message"></p>
     </div>
-    <script src="js/login.js"></script>
 </body>
 </html>
