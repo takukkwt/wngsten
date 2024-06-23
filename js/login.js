@@ -5,8 +5,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const password = document.getElementById('password').value;
 
     // 正しいユーザー名とパスワード
-    const correctUsername = 'admin';
-    const correctPassword = 'password123';
+    const correctUsername = 'user';
+    const correctPassword = 'user74';
 
     if (username === correctUsername && password === correctPassword) {
         window.location.href = 'home.html';
