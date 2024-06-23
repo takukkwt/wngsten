@@ -20,7 +20,7 @@ body {
 
 /* ヘッダー */
 header {
-    background-color: #f0f0f0; /* ヘッダーの背景色を設定 */
+    background-color: #ffffff; /* ヘッダーの背景色を設定 */
     padding: 10px 20px; /* パディングを追加 */
     position: fixed; /* ヘッダーを固定位置にする */
     top: 0; /* 上端からの距離を0に設定 */
