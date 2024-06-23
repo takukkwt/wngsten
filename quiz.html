@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ</title>
+    <link rel="stylesheet" href="quizstyle.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="question-counter">1問目</div>
+        <h1>クイズ</h1>
+        <div class="question">
+            <p id="question-text"></p>
+            <input type="text" id="answer" placeholder="答えを入力">
+            <button onclick="checkAnswer()">回答</button>
+        </div>
+        <div id="feedback"></div>
+    </div>
+    <script src="js/quiz.js"></script>
+</body>
+</html>
