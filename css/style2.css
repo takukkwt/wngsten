@@ -48,15 +48,6 @@ header {
     margin-right: 20px; /* 「いろいろ」とトップに戻るボタンの間にスペースを追加 */
 }
 
-.back-to-top {
-    text-decoration: none; /* リンクの下線を削除 */
-    padding: 5px 10px; /* ボタンのパディングを追加 */
-    background-color: #007bff; /* ボタンの背景色を設定 */
-    color: white; /* ボタンのテキスト色を設定 */
-    border-radius: 4px; /* ボタンに角丸を適用 */
-    margin-left: auto; /* 右側に余白を自動的に設定 */
-}
-
 h1 {
     font-size: 3em;
     margin-bottom: 10px;
