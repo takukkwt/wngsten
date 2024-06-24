@@ -16,6 +16,30 @@
             margin: 0;
             background: #f0f0f0;
         }
+        header {
+    background-color: #ffffff; /* ヘッダーの背景色を設定 */
+    padding: 10px 20px; /* パディングを追加 */
+    position: fixed; /* ヘッダーを固定位置にする */
+    top: 0; /* 上端からの距離を0に設定 */
+    left: 0; /* 左端からの距離を0に設定 */
+    width: 100%; /* ヘッダーの幅を100%に設定 */
+    z-index: 1000; /* ヘッダーの重なり順を設定 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ドロップシャドウを追加 */
+}
+
+.header-inner {
+    display: flex;
+    align-items: center; /* アイテムを垂直に中央揃え */
+}
+
+.header-inner img {
+    max-width: 200px; /* ロゴの幅を調整（必要に応じて変更） */
+}
+
+.header-content {
+    margin-left: 20px; /* ロゴと「いろいろ」の間にスペースを追加 */
+    flex-grow: 1; /* コンテンツが残りのスペースを占めるようにする */
+}
 
         h1 {
             color: #333;
@@ -46,6 +70,12 @@
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-inner">
+            <img src="img/logo.png">
+        </div>
+    </header>
+
     <h1>QR Code Scanner</h1>
     <div id="reader"></div>
     <div class="footer">Point your camera at the QR code</div>
