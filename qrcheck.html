@@ -16,6 +16,7 @@
             margin: 0;
             background: #f0f0f0;
         }
+
         header {
     background-color: #ffffff; /* ヘッダーの背景色を設定 */
     padding: 10px 20px; /* パディングを追加 */
@@ -58,10 +59,6 @@
             justify-content: center;
         }
 
-        #reader > div {
-            width: 100%;
-        }
-
         .footer {
             margin-top: 20px;
             font-size: 14px;
@@ -76,9 +73,9 @@
         </div>
     </header>
 
-    <h1>QR Code Scanner</h1>
+    <h1>QR Code</h1>
     <div id="reader"></div>
-    <div class="footer">Point your camera at the QR code</div>
+    <div class="footer">枠内にQRコードを収めてください。</div>
 
     <script>
         function onScanSuccess(decodedText, decodedResult) {
@@ -96,10 +93,23 @@
             console.warn(`QRコードのスキャンに失敗しました: ${error}`);
         }
 
-        // カメラを起動してQRコードを読み取る
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: 250 });
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        // カメラの許可を求める
+        function startScanner() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    let videoTracks = stream.getVideoTracks();
+                    let html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader", { fps: 10, qrbox: 250 });
+                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                })
+                .catch(err => {
+                    console.error("カメラのアクセスが拒否されました: ", err);
+                    alert("カメラのアクセスが拒否されました。カメラのアクセスを許可してください。");
+                });
+        }
+
+        // ページロード時にカメラの許可を求める
+        window.addEventListener('load', startScanner);
     </script>
 </body>
 </html>
