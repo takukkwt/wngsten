@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Video Player with Stylish Progress Bar</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    /* ヘッダーのスタイル */
+    header {
+        background-color: #ffffff; /* ヘッダーの背景色を設定 */
+        padding: 10px 20px; /* パディングを追加 */
+        position: fixed; /* ヘッダーを固定位置にする */
+        top: 0; /* 上端からの距離を0に設定 */
+        left: 0; /* 左端からの距離を0に設定 */
+        width: 100%; /* ヘッダーの幅を100%に設定 */
+        z-index: 1000; /* ヘッダーの重なり順を設定 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ドロップシャドウを追加 */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-inner img {
+        max-width: 150px; /* ロゴの最大幅を設定 */
+    }
+
+    .header-content nav ul {
+        list-style-type: none; /* リストスタイルをなしにする */
+        padding: 0;
+        margin: 0;
+    }
+
+    .header-content nav ul li {
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .header-content nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .header-content nav ul li a:hover {
+        color: #666;
+    }
+
+    /* 動画プレーヤーのスタイル */
+    .video-wrapper {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        margin: 80px auto 0; /* ヘッダーの高さ分だけ下にスペースを空ける */
+        background-color: #222;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    video {
+        width: 100%;
+        display: block;
+    }
+
+    .controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .controls button {
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .controls button:hover {
+        color: #ddd;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 10px;
+        margin: 0 10px;
+        background-color: #666;
+        position: relative;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-bar .progress {
+        height: 100%;
+        background-color: #4CAF50;
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: width 0.3s ease;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <img src="img/logo.png" alt="ロゴ">
+    </div>
+</header>
+
+<div class="video-wrapper">
+    <video id="myVideo" controls>
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="controls">
+        <button id="playPauseBtn">&#9658;</button>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <button id="volumeBtn">&#128266;</button>
+        <input type="range" id="volumeRange" min="0" max="1" step="0.1" value="1">
+        <button id="fullscreenBtn">&#128470;</button>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('myVideo');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const progress = document.getElementById('progress');
+    const volumeBtn = document.getElementById('volumeBtn');
+    const volumeRange = document.getElementById('volumeRange');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Play/Pauseボタンのクリックイベント
+    playPauseBtn.addEventListener('click', () => {
+        if (video.paused || video.ended) {
+            video.play();
+            playPauseBtn.innerHTML = '&#10074;&#10074;'; // Pauseアイコン
+        } else {
+            video.pause();
+            playPauseBtn.innerHTML = '&#9658;'; // Playアイコン
+        }
+    });
+
+    // ボリュームボタンのクリックイベント
+    volumeBtn.addEventListener('click', () => {
+        if (video.muted) {
+            video.muted = false;
+            volumeBtn.innerHTML = '&#128266;'; // ボリュームアイコン
+            volumeRange.value = video.volume;
+        } else {
+            video.muted = true;
+            volumeBtn.innerHTML = '&#128263;'; // ミュートアイコン
+            volumeRange.value = 0;
+        }
+    });
+
+    // ボリュームスライダーの変更イベント
+    volumeRange.addEventListener('input', () => {
+        video.volume = volumeRange.value;
+        if (video.volume === 0) {
+            volumeBtn.innerHTML = '&#128263;'; // ミュートアイコン
+        } else {
+            volumeBtn.innerHTML = '&#128266;'; // ボリュームアイコン
+        }
+    });
+
+    // フルスクリーンボタンのクリックイベント
+    fullscreenBtn.addEventListener('click', () => {
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) { /* Safari */
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { /* IE11 */
+            video.msRequestFullscreen();
+        }
+    });
+
+    // 動画の進行状況を更新する
+    video.addEventListener('timeupdate', () => {
+        const progressPosition = video.currentTime / video.duration;
+        progress.style.width = `${progressPosition * 100}%`;
+    });
+
+</script>
+
+</body>
+</html>
