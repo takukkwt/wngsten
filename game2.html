@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>長さ推測ゲーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #game {
+            text-align: center;
+        }
+
+        #bar-container {
+            width: 80%;
+            height: 20px;
+            background-color: #ccc;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bar, #adjustable-bar {
+            height: 20px;
+            background-color: #4caf50;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #adjustable-bar {
+            cursor: ew-resize;
+            width: 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #adjustable-bar-container {
+            margin: 20px auto;
+            width: 80%;
+            display: none;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="instruction">棒の長さを覚えてください。</div>
+        <div id="bar-container">
+            <div id="bar"></div>
+        </div>
+        <div id="adjustable-bar-container">
+            <div id="adjustable-bar"></div>
+        </div>
+        <button id="startButton" onclick="startGame()">ゲーム開始</button>
+        <button id="submitButton" onclick="submitGuess()" style="display:none;">推測を提出</button>
+        <button id="restartButton" onclick="restartGame()" style="display:none;">もう一度プレイ</button>
+        <div id="result" style="display:none;"></div>
+    </div>
+    <script>
+        let actualLength;
+        let initialBarLeft;
+        let isDragging = false;
+        let adjustStartTime;
+
+        function startGame() {
+            // 棒の長さをランダムに設定（0pxから200pxの範囲）
+            actualLength = Math.floor(Math.random() * 201);
+            document.getElementById('bar').style.width = actualLength + 'px';
+
+            // ゲームの説明と棒を表示
+            document.getElementById('instruction').innerText = '棒の長さを覚えてください。';
+            document.getElementById('bar-container').style.display = 'block';
+            document.getElementById('adjustable-bar-container').style.display = 'none';
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('restartButton').style.display = 'none';
+
+            // 1秒後に棒を隠し、3秒待つ
+            setTimeout(() => {
+                document.getElementById('bar-container').style.display = 'none';
+                document.getElementById('instruction').innerText = '棒の長さを調整してください。';
+                setTimeout(() => {
+                    document.getElementById('adjustable-bar-container').style.display = 'block';
+                    // 調整バーの初期位置を設定
+                    document.getElementById('adjustable-bar').style.width = actualLength + 'px';
+                    document.getElementById('adjustable-bar').style.left = '0';
+                    adjustStartTime = Date.now();
+                    document.getElementById('submitButton').style.display = 'inline-block';
+                }, 3000);
+            }, 1000);
+        }
+
+        function adjustBar(e) {
+            if (isDragging) {
+                const container = document.getElementById('adjustable-bar-container');
+                const containerRect = container.getBoundingClientRect();
+                let newWidth = e.clientX - containerRect.left;
+                // 調整範囲を制限する（0からactualLengthの範囲）
+                newWidth = Math.max(0, Math.min(actualLength, newWidth));
+                document.getElementById('adjustable-bar').style.width = newWidth + 'px';
+            }
+        }
+
+        function startDragging(e) {
+            isDragging = true;
+            initialBarLeft = e.target.getBoundingClientRect().left;
+        }
+
+        function stopDragging() {
+            isDragging = false;
+        }
+
+        function submitGuess() {
+            // ユーザーの推測を取得
+            let userGuessLength = parseInt(document.getElementById('adjustable-bar').style.width);
+
+            let error = Math.abs(actualLength - userGuessLength);
+
+            document.getElementById('result').innerText = `実際の長さ: ${actualLength}px\nあなたの推測: ${userGuessLength}px\n誤差: ${error}px`;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('restartButton').style.display = 'inline-block';
+        }
+
+        function restartGame() {
+            // ゲームをリセット
+            document.getElementById('instruction').innerText = '棒の長さを覚えてください。';
+            document.getElementById('startButton').style.display = 'inline-block';
+            document.getElementById('submitButton').style.display = 'none';
+            document.getElementById('adjustable-bar-container').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('restartButton').style.display = 'none';
+        }
+
+        // ドラッグによる長さの調整
+        document.addEventListener('mousemove', adjustBar);
+        document.addEventListener('mouseup', stopDragging);
+        document.getElementById('adjustable-bar').addEventListener('mousedown', startDragging);
+
+        // 制限時間の確認と自動終了
+        setInterval(() => {
+            if (Date.now() - adjustStartTime > 10000 && isDragging) {
+                stopDragging();
+                submitGuess();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
