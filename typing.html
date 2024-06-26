@@ -21,38 +21,24 @@
             border: 1px solid #cccccc;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative; /* 追加 */
-            overflow: hidden; /* 追加 */
         }
 
         .quote-container {
-            position: absolute; /* 追加 */
-            top: 0; /* 追加 */
-            left: 0; /* 追加 */
-            width: 100%; /* 追加 */
-            height: 100%; /* 追加 */
-            display: flex; /* 追加 */
-            justify-content: center; /* 追加 */
-            align-items: center; /* 追加 */
-            flex-direction: column; /* 追加 */
-            transition: opacity 0.5s ease-out; /* 追加 */
-        }
-
-        .quote-hidden {
-            opacity: 0; /* 追加 */
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        #quote-romaji, #quote-japanese {
-            font-size: 1.5rem;
             margin-bottom: 20px;
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* 追加 */
-            font-style: italic; /* 追加 */
-            font-weight: normal; /* 追加 */
-            color: #666666; /* 追加 */
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .typed-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #cccccc; /* 入力済み文字の色 */
+            margin-bottom: 10px;
         }
 
         #user-input {
@@ -86,9 +72,9 @@
 <body>
     <div class="game-container">
         <h1>タイピングゲーム</h1>
-        <div class="quote-container" id="quote-container">
-            <p id="quote-romaji"></p>
-            <p id="quote-japanese"></p>
+        <div class="quote-container">
+            <p class="quote-text" id="quote-text"></p>
+            <p class="typed-text" id="typed-text"></p>
         </div>
         <input type="text" id="user-input" placeholder="ここに入力してください">
         <button id="start-btn">スタート</button>
@@ -97,77 +83,102 @@
 
     <script>
         const quotes = [
-            { romaji: "aozora no shita, kaze ni naritai.", japanese: "青空の下、風になりたい。" },
-            { romaji: "yume wa owaru koto naku, tsuzuite iku.", japanese: "夢は終わることなく、続いていく。" },
-            { romaji: "ashita e no kibou o wasurenaide.", japanese: "明日への希望を忘れないで。" },
-            { romaji: "kokoro no naka ni hana o sakaseyou.", japanese: "心の中に花を咲かせよう。" },
-            { romaji: "sekai wa kimi no iro ni somaru.", japanese: "世界は君の色に染まる。" },
-            { romaji: "mirai e no ippo o fumidasou.", japanese: "未来への一歩を踏み出そう。" }
+            { text: "青空の下、風になりたい。", level: 1 },
+            { text: "夢は終わることなく、続いていく。", level: 1 },
+            { text: "明日への希望を忘れないで。", level: 2 },
+            { text: "心の中に花を咲かせよう。", level: 2 },
+            { text: "世界は君の色に染まる。", level: 3 },
+            { text: "未来への一歩を踏み出そう。", level: 3 }
         ];
 
-        const romajiElement = document.getElementById('quote-romaji');
-        const japaneseElement = document.getElementById('quote-japanese');
+        const quoteTextElement = document.getElementById('quote-text');
+        const typedTextElement = document.getElementById('typed-text');
         const userInput = document.getElementById('user-input');
         const resultElement = document.getElementById('result');
         const startButton = document.getElementById('start-btn');
-        const quoteContainer = document.getElementById('quote-container');
 
         let currentQuoteIndex;
         let startTime;
+        let levelTime = {
+            1: 10 * 1000, // 10秒
+            2: 7 * 1000,  // 7秒
+            3: 4 * 1000   // 4秒
+        };
 
-        function getRandomQuote() {
-            currentQuoteIndex = Math.floor(Math.random() * quotes.length);
-            romajiElement.textContent = quotes[currentQuoteIndex].romaji;
-            japaneseElement.textContent = quotes[currentQuoteIndex].japanese;
+        function getRandomQuote(level) {
+            let filteredQuotes = quotes.filter(q => q.level === level);
+            currentQuoteIndex = Math.floor(Math.random() * filteredQuotes.length);
+            return filteredQuotes[currentQuoteIndex];
         }
 
         function startGame() {
+            const selectedQuote = getRandomQuote(1); // 初期はレベル1からスタート
+            quoteTextElement.textContent = selectedQuote.text;
+            typedTextElement.textContent = '';
             userInput.value = '';
             resultElement.textContent = '';
-            quoteContainer.classList.remove('quote-hidden'); // 追加
-            getRandomQuote();
+            userInput.disabled = false;
             userInput.focus();
             startTime = new Date().getTime();
             startButton.disabled = true;
+
+            setTimeout(() => {
+                endGame();
+            }, levelTime[selectedQuote.level]);
         }
 
         function endGame() {
             const endTime = new Date().getTime();
             const totalTime = (endTime - startTime) / 1000;
-            const typedText = userInput.value.trim();
-            const quoteText = quotes[currentQuoteIndex].romaji;
-            
-            const words = quoteText.split(' ');
-            const typedWords = typedText.split(' ');
-            let correctWords = 0;
+            const typedText = typedTextElement.textContent.trim();
+            const quoteText = quoteTextElement.textContent;
 
-            words.forEach((word, index) => {
-                if (typedWords[index] && typedWords[index] === word) {
-                    correctWords++;
-                }
-            });
-
-            const accuracy = (correctWords / words.length) * 100;
-            const wordsPerMinute = Math.round(words.length / (totalTime / 60));
+            const accuracy = calculateAccuracy(typedText, quoteText);
+            const wordsPerMinute = calculateWordsPerMinute(typedText, totalTime);
 
             resultElement.textContent = `正確さ: ${accuracy.toFixed(2)}% | 速度: ${wordsPerMinute} 語/分`;
-
-            quoteContainer.classList.add('quote-hidden'); // 追加
-            setTimeout(getRandomQuote, 500); // 追加
-            setTimeout(() => { quoteContainer.classList.remove('quote-hidden'); }, 600); // 追加
-
             startButton.disabled = false;
+            userInput.disabled = true;
         }
 
-        startButton.addEventListener('click', startGame);
-        userInput.addEventListener('input', function() {
-            const quoteText = quotes[currentQuoteIndex].romaji;
-            const typedText = userInput.value.trim();
+        function calculateAccuracy(typedText, quoteText) {
+            if (quoteText.length === 0) {
+                return 100;
+            }
 
-            if (typedText === quoteText) {
-                endGame();
+            let correctChars = 0;
+            for (let i = 0; i < typedText.length; i++) {
+                if (typedText[i] === quoteText[i]) {
+                    correctChars++;
+                }
+            }
+
+            return (correctChars / quoteText.length) * 100;
+        }
+
+        function calculateWordsPerMinute(typedText, totalTime) {
+            const words = typedText.split(' ').length;
+            const minutes = totalTime / 60;
+            return Math.round(words / minutes);
+        }
+
+        userInput.addEventListener('input', function() {
+            const typed = userInput.value;
+            const quote = quoteTextElement.textContent;
+
+            typedTextElement.textContent = '';
+
+            for (let i = 0; i < typed.length; i++) {
+                let span = document.createElement('span');
+                span.textContent = typed[i];
+                if (typed[i] === quote[i]) {
+                    span.style.color = '#cccccc'; // 入力済み文字の色
+                }
+                typedTextElement.appendChild(span);
             }
         });
+
+        startButton.addEventListener('click', startGame);
     </script>
 </body>
 </html>
