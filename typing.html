@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タイピングゲーム</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* 追加 */
+            overflow: hidden; /* 追加 */
+        }
+
+        .quote-container {
+            position: absolute; /* 追加 */
+            top: 0; /* 追加 */
+            left: 0; /* 追加 */
+            width: 100%; /* 追加 */
+            height: 100%; /* 追加 */
+            display: flex; /* 追加 */
+            justify-content: center; /* 追加 */
+            align-items: center; /* 追加 */
+            flex-direction: column; /* 追加 */
+            transition: opacity 0.5s ease-out; /* 追加 */
+        }
+
+        .quote-hidden {
+            opacity: 0; /* 追加 */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        #quote-romaji, #quote-japanese {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* 追加 */
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        #start-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #start-btn:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>タイピングゲーム</h1>
+        <div class="quote-container" id="quote-container">
+            <p id="quote-romaji"></p>
+            <p id="quote-japanese"></p>
+        </div>
+        <input type="text" id="user-input" placeholder="ここに入力してください">
+        <button id="start-btn">スタート</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const quotes = [
+            { romaji: "aozora no shita, kaze ni naritai.", japanese: "青空の下、風になりたい。" },
+            { romaji: "yume wa owaru koto naku, tsuzuite iku.", japanese: "夢は終わることなく、続いていく。" },
+            { romaji: "ashita e no kibou o wasurenaide.", japanese: "明日への希望を忘れないで。" },
+            { romaji: "kokoro no naka ni hana o sakaseyou.", japanese: "心の中に花を咲かせよう。" },
+            { romaji: "sekai wa kimi no iro ni somaru.", japanese: "世界は君の色に染まる。" },
+            { romaji: "mirai e no ippo o fumidasou.", japanese: "未来への一歩を踏み出そう。" }
+        ];
+
+        const romajiElement = document.getElementById('quote-romaji');
+        const japaneseElement = document.getElementById('quote-japanese');
+        const userInput = document.getElementById('user-input');
+        const resultElement = document.getElementById('result');
+        const startButton = document.getElementById('start-btn');
+        const quoteContainer = document.getElementById('quote-container');
+
+        let currentQuoteIndex;
+        let startTime;
+
+        function getRandomQuote() {
+            currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+            romajiElement.textContent = quotes[currentQuoteIndex].romaji;
+            japaneseElement.textContent = quotes[currentQuoteIndex].japanese;
+        }
+
+        function startGame() {
+            userInput.value = '';
+            resultElement.textContent = '';
+            quoteContainer.classList.remove('quote-hidden'); // 追加
+            getRandomQuote();
+            userInput.focus();
+            startTime = new Date().getTime();
+            startButton.disabled = true;
+        }
+
+        function endGame() {
+            const endTime = new Date().getTime();
+            const totalTime = (endTime - startTime) / 1000;
+            const typedText = userInput.value.trim();
+            const quoteText = quotes[currentQuoteIndex].romaji;
+            
+            const words = quoteText.split(' ');
+            const typedWords = typedText.split(' ');
+            let correctWords = 0;
+
+            words.forEach((word, index) => {
+                if (typedWords[index] && typedWords[index] === word) {
+                    correctWords++;
+                }
+            });
+
+            const accuracy = (correctWords / words.length) * 100;
+            const wordsPerMinute = Math.round(words.length / (totalTime / 60));
+
+            resultElement.textContent = `正確さ: ${accuracy.toFixed(2)}% | 速度: ${wordsPerMinute} 語/分`;
+
+            quoteContainer.classList.add('quote-hidden'); // 追加
+            setTimeout(getRandomQuote, 500); // 追加
+            setTimeout(() => { quoteContainer.classList.remove('quote-hidden'); }, 600); // 追加
+
+            startButton.disabled = false;
+        }
+
+        startButton.addEventListener('click', startGame);
+        userInput.addEventListener('input', function() {
+            const quoteText = quotes[currentQuoteIndex].romaji;
+            const typedText = userInput.value.trim();
+
+            if (typedText === quoteText) {
+                endGame();
+            }
+        });
+    </script>
+</body>
+</html>
