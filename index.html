@@ -51,15 +51,65 @@
         button:hover {
             background-color: #45a049;
         }
+
+        #loading-bar {
+            display: none;
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #loading-bar div {
+            height: 100%;
+            width: 0;
+            background-color: #4CAF50;
+            transition: width 0.2s;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="img/logo.png">
+        <img src="img/logo.png" alt="Logo">
         <p>Othertkkの世界へようこそ。<a href="kiyaku.html">利用規約</a></p>
         <form action="home.html">
-            <button type="submit">Enter Othertkk</button>
+            <button type="submit" id="enter-button">Enter Othertkk</button>
         </form>
+        <div id="loading-bar"><div></div></div>
     </div>
+
+    <script>
+        document.getElementById('enter-button').addEventListener('click', function(event) {
+            event.preventDefault(); // フォームの即時送信を防止
+            var button = document.getElementById('enter-button');
+            var loadingBar = document.getElementById('loading-bar');
+            var loadingBarInner = loadingBar.querySelector('div');
+
+            button.style.display = 'none'; // ボタンを非表示にする
+            loadingBar.style.display = 'block'; // ロードバーを表示する
+
+            var loadingTime = Math.random() * (20000 - 2000) + 2000; // 2秒から20秒のランダムな時間
+
+            // ロードバーのアニメーション
+            var startTime = null;
+            function animateLoadingBar(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = timestamp - startTime;
+                var progressPercent = Math.min(progress / loadingTime * 100, 100);
+                loadingBarInner.style.width = progressPercent + '%';
+
+                if (progress < loadingTime) {
+                    requestAnimationFrame(animateLoadingBar);
+                }
+            }
+            requestAnimationFrame(animateLoadingBar);
+
+            // ランダムな時間の後にリダイレクト
+            setTimeout(function() {
+                window.location.href = 'home.html';
+            }, loadingTime);
+        });
+    </script>
 </body>
 </html>
