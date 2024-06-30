@@ -26,9 +26,26 @@
             width: 100%;
         }
 
+        .logos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         img { 
             margin-bottom: 20px;
             max-width: 200px;
+        }
+
+        .supported-by {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .supported-by img {
+            max-width: 100px;
         }
 
         p {
@@ -71,7 +88,14 @@
 </head>
 <body>
     <div class="container">
-        <img src="img/logo.png" alt="Logo">
+        <div class="logos">
+            <img src="img/logo.png" alt="Logo">
+            <div class="supported-by">
+                <span>Supported by</span>
+                <img src="img/logo2.png" alt="Logo 2">
+                <img src="img/logo3.png" alt="Logo 3">
+            </div>
+        </div>
         <p>Othertkkの世界へようこそ。<a href="kiyaku.html">利用規約</a></p>
         <form action="home.html">
             <button type="submit" id="enter-button">Enter Othertkk</button>
@@ -89,7 +113,7 @@
             button.style.display = 'none'; // ボタンを非表示にする
             loadingBar.style.display = 'block'; // ロードバーを表示する
 
-            var loadingTime = Math.random() * (2000 - 200) + 2000; // 2秒から20秒のランダムな時間
+            var loadingTime = Math.random() * (1000 - 200) + 2000; // 0.2秒から1秒のランダムな時間
 
             // ロードバーのアニメーション
             var startTime = null;
