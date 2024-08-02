@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二重振り子シミュレーション</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+        .controls, #infoPanel {
+            margin-bottom: 10px;
+        }
+        input {
+            margin: 5px;
+        }
+        button {
+            margin: 5px;
+        }
+        #infoPanel p {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>二重振り子シミュレーション</h1>
+    <div class="controls">
+        <label for="m1">質量 1 (m1): </label>
+        <input type="number" id="m1" value="1" step="0.1" min="0.1">
+        <label for="m2">質量 2 (m2): </label>
+        <input type="number" id="m2" value="1" step="0.1" min="0.1"><br>
+        <label for="l1">長さ 1 (l1): </label>
+        <input type="number" id="l1" value="1" step="0.1" min="0.1">
+        <label for="l2">長さ 2 (l2): </label>
+        <input type="number" id="l2" value="1" step="0.1" min="0.1"><br>
+        <label for="a1">初期角度 1 (a1, ラジアン): </label>
+        <input type="number" id="a1" value="1.57" step="0.01" min="-3.14" max="3.14">
+        <label for="a2">初期角度 2 (a2, ラジアン): </label>
+        <input type="number" id="a2" value="1.57" step="0.01" min="-3.14" max="3.14"><br>
+        <button id="pauseBtn">一時停止</button>
+        <button id="resumeBtn" style="display:none;">再開</button>
+        <button id="resetBtn">リセット</button>
+        <button id="saveBtn">保存</button>
+        <button id="loadBtn">読み込み</button><br>
+        <label for="toggleTrajectory">軌跡を描く:</label>
+        <input type="checkbox" id="toggleTrajectory" checked>
+    </div>
+    <div id="infoPanel">
+        <p>質量 1 (m1): <span id="infoM1">1</span></p>
+        <p>質量 2 (m2): <span id="infoM2">1</span></p>
+        <p>長さ 1 (l1): <span id="infoL1">1</span></p>
+        <p>長さ 2 (l2): <span id="infoL2">1</span></p>
+        <p>角度 1 (a1): <span id="infoA1">1.57</span></p>
+        <p>角度 2 (a2): <span id="infoA2">1.57</span></p>
+    </div>
+    <canvas id="pendulumCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('pendulumCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const G = 9.81; // 重力加速度
+        const dt = 0.02; // 時間の刻み
+        const scale = 150; // 描画のスケール
+
+        let m1, m2, l1, l2, a1, a2, a1_v, a2_v;
+        let paused = false;
+        let trajectory1 = [];
+        let trajectory2 = [];
+
+        const toggleTrajectory = document.getElementById('toggleTrajectory');
+
+        function initialize() {
+            m1 = parseFloat(document.getElementById('m1').value);
+            m2 = parseFloat(document.getElementById('m2').value);
+            l1 = parseFloat(document.getElementById('l1').value);
+            l2 = parseFloat(document.getElementById('l2').value);
+            a1 = parseFloat(document.getElementById('a1').value);
+            a2 = parseFloat(document.getElementById('a2').value);
+            a1_v = 0;
+            a2_v = 0;
+            trajectory1 = [];
+            trajectory2 = [];
+            updateInfoPanel();
+        }
+
+        function drawPendulum(x1, y1, x2, y2) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 軌跡の描画
+            if (toggleTrajectory.checked) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+                ctx.lineWidth = 1;
+                trajectory1.forEach(([px, py]) => {
+                    ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                ctx.lineWidth = 1;
+                trajectory2.forEach(([px, py]) => {
+                    ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+            }
+
+            // 振り子の線と質量の描画
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, canvas.height / 4);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x1, y1, 10, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(x2, y2, 10, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function updatePendulum() {
+            let num1 = -G * (2 * m1 + m2) * Math.sin(a1);
+            let num2 = -m2 * G * Math.sin(a1 - 2 * a2);
+            let num3 = -2 * Math.sin(a1 - a2) * m2;
+            let num4 = a2_v * a2_v * l2 + a1_v * a1_v * l1 * Math.cos(a1 - a2);
+            let den = l1 * (2 * m1 + m2 - m2 * Math.cos(2 * a1 - 2 * a2));
+            let a1_a = (num1 + num2 + num3 * num4) / den;
+
+            num1 = 2 * Math.sin(a1 - a2);
+            num2 = (a1_v * a1_v * l1 * (m1 + m2));
+            num3 = G * (m1 + m2) * Math.cos(a1);
+            num4 = a2_v * a2_v * l2 * m2 * Math.cos(a1 - a2);
+            den = l2 * (2 * m1 + m2 - m2 * Math.cos(2 * a1 - 2 * a2));
+            let a2_a = (num1 * (num2 + num3 + num4)) / den;
+
+            a1_v += a1_a * dt;
+            a2_v += a2_a * dt;
+            a1 += a1_v * dt;
+            a2 += a2_v * dt;
+
+            // 最大速度制限
+            const maxVelocity = 10;
+            a1_v = Math.min(Math.max(a1_v, -maxVelocity), maxVelocity);
+            a2_v = Math.min(Math.max(a2_v, -maxVelocity), maxVelocity);
+
+            let x1 = l1 * Math.sin(a1) * scale + canvas.width / 2;
+            let y1 = l1 * Math.cos(a1) * scale + canvas.height / 4;
+            let x2 = x1 + l2 * Math.sin(a2) * scale;
+            let y2 = y1 + l2 * Math.cos(a2) * scale;
+
+            // 軌跡の追加
+            if (toggleTrajectory.checked) {
+                trajectory1.push([canvas.width / 2, canvas.height / 4]);
+                trajectory2.push([x2, y2]);
+
+            }
+
+            drawPendulum(x1, y1, x2, y2);
+        }
+
+        function updateInfoPanel() {
+            document.getElementById('infoM1').textContent = m1;
+            document.getElementById('infoM2').textContent = m2;
+            document.getElementById('infoL1').textContent = l1;
+            document.getElementById('infoL2').textContent = l2;
+            document.getElementById('infoA1').textContent = a1.toFixed(2);
+            document.getElementById('infoA2').textContent = a2.toFixed(2);
+        }
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            paused = true;
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('resumeBtn').style.display = 'inline';
+        });
+
+        document.getElementById('resumeBtn').addEventListener('click', () => {
+            paused = false;
+            document.getElementById('resumeBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline';
+            animate();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            initialize();
+            animate();
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const state = {
+                m1, m2, l1, l2, a1, a2, a1_v, a2_v
+            };
+            localStorage.setItem('pendulumState', JSON.stringify(state));
+        });
+
+        document.getElementById('loadBtn').addEventListener('click', () => {
+            const state = JSON.parse(localStorage.getItem('pendulumState'));
+            if (state) {
+                m1 = state.m1;
+                m2 = state.m2;
+                l1 = state.l1;
+                l2 = state.l2;
+                a1 = state.a1;
+                a2 = state.a2;
+                a1_v = state.a1_v;
+                a2_v = state.a2_v;
+                updateInfoPanel();
+                animate();
+            }
+        });
+
+        function animate() {
+            if (!paused) {
+                updatePendulum();
+                requestAnimationFrame(animate);
+            }
+        }
+
+        // 初期化してアニメーション開始
+        initialize();
+        animate();
+    </script>
+</body>
+</html>
